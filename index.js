@@ -2,5 +2,6 @@
 'use strict';
 
 module.exports = {
-  name: 'cordova-lib'
+  name: 'cordova-lib',
+  isDevelopingAddon: () => true
 };

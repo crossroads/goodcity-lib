@@ -11,9 +11,12 @@
     "start": "ember server",
     "test": "ember try:testall"
   },
-  "repository": "",
+  "repository": {
+    "url": "https://github.com/crossroads/goodcity-lib.git",
+    "private": true
+  },
   "engines": {
-    "node": ">= 0.10.0"
+    "node": ">= 4"
   },
   "author": "",
   "license": "MIT",
@@ -40,7 +43,8 @@
     "loader.js": "^4.0.1"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "goodcity"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.6"

@@ -1,0 +1,75 @@
+import Ember from 'ember';
+
+var storageSupported = false;
+try { localStorage.test = 2; delete localStorage.test; storageSupported = true; }
+catch(err) {}
+
+var cookiesSupported = false;
+try { Ember.$.cookie('test', 2); Ember.$.removeCookie('test'); cookiesSupported = true; }
+catch(err) {}
+
+var localStorageProvider = {
+  get(key) {
+    try {
+      return JSON.parse(localStorage[key] || null);
+    } catch(e) {
+      return null;
+    }
+  },
+  set(key, value) {
+    if (Ember.isNone(value)) {
+      delete localStorage[key];
+    } else {
+      localStorage[key] = JSON.stringify(value);
+    }
+    return value;
+  }
+};
+
+var cookieStorageProvider = {
+  get(key) {
+    return Ember.$.cookie(key);
+  },
+  set(key, value) {
+    Ember.$.cookie.json = true;
+    if (Ember.isNone(value)) {
+      Ember.$.removeCookie(key);
+    } else {
+      var config = Ember.getOwner(this).lookup('config:environment');
+      Ember.$.cookie(key, value, {expires:365, path:'/', secure:config.environment==='production'});
+    }
+    return value;
+  }
+};
+
+var memoryStorageProvider = {
+  get(key) {
+    if (!window.goodcityStorage) {
+      window.goodcityStorage = {};
+    }
+    return window.goodcityStorage[key];
+  },
+  set(key, value) {
+    if (!window.goodcityStorage) {
+      window.goodcityStorage = {};
+    }
+    if (Ember.isNone(value)) {
+      delete window.goodcityStorage[key];
+    } else {
+      window.goodcityStorage[key] = value;
+    }
+    return value;
+  }
+};
+
+export default Ember.computed.localStorage = function() {
+  if (storageSupported) {
+    return Ember.computed(localStorageProvider);
+  }
+
+  if (cookiesSupported) {
+    return Ember.computed(cookieStorageProvider);
+  }
+
+  return Ember.computed(memoryStorageProvider);
+};
