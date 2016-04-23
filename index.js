@@ -2,6 +2,6 @@
 'use strict';
 
 module.exports = {
-  name: 'cordova-lib',
+  name: 'goodcity-lib',
   isDevelopingAddon: () => true
 };

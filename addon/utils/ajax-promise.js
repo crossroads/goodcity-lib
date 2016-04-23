@@ -9,7 +9,7 @@ export default function(url, type, authToken, data, args) {
       "X-GOODCITY-APP-SHA": config.APP.SHA
     };
     if(authToken) {
-      headers = Ember.$.extend(headers, { Authorization: "Bearer " + authToken })
+      headers = Ember.$.extend(headers, { Authorization: "Bearer " + authToken });
     }
 
     Ember.$.ajax(Ember.$.extend({}, {

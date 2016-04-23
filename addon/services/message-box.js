@@ -1,3 +1,4 @@
+import Ember from 'ember';
 const { getOwner } = Ember;
 
 export default Ember.Service.extend({
@@ -12,7 +13,7 @@ export default Ember.Service.extend({
   },
 
   custom: function(message, btn1Text, btn1Callback, btn2Text, btn2Callback, displayCloseLink) {
-    $(document).trigger("cancel-loading-timer");
+    Ember.$(document).trigger("cancel-loading-timer");
     Ember.$(".loading-indicator").remove();
 
     var view = getOwner(this).lookup("component:message-box").append();
