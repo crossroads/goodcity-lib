@@ -1,7 +1,7 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 export default function(url, type, authToken, data, args) {
-  var config = Ember.getOwner(this).lookup('config:environment');
   return new Ember.RSVP.Promise(function(resolve, reject) {
     var headers = {
       "X-GOODCITY-APP-NAME": config.APP.NAME,
@@ -9,7 +9,7 @@ export default function(url, type, authToken, data, args) {
       "X-GOODCITY-APP-SHA": config.APP.SHA
     };
     if(authToken) {
-      headers = Ember.$.extend(headers, { Authorization: "Bearer " + authToken });
+      headers = Ember.$.extend(headers, { Authorization: "Bearer " + authToken })
     }
 
     Ember.$.ajax(Ember.$.extend({}, {
