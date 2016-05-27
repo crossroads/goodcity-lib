@@ -1,0 +1,32 @@
+/**************Styles to truncate the text using and show ellipses**********/
+.vcenter {
+  -webkit-transform: translateY(20%);
+  -ms-transform: translateY(20%);
+  transform: translateY(20%);
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  line-height: 1.5;    /* fallback */
+  word-break: break-word;
+}
+.ellipsis a {
+  display: inline;
+}
+.one-line-ellipsis {
+  max-height: 1.4rem;  /* fallback */
+  -webkit-line-clamp: 1; /* number of lines to show */
+}
+.two-line-ellipsis {
+  max-height: 2.9rem;
+  -webkit-line-clamp: 2; /* number of lines to show */
+}
+.three-line-ellipsis {
+  max-height: 4.5rem;
+  -webkit-line-clamp: 3; /* number of lines to show */
+}
