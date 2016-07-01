@@ -1,0 +1,17 @@
+machine:
+  node:
+    version: 4
+
+dependencies:
+  post:
+    - "./node_modules/ember-cli/node_modules/bower/bin/bower install"
+  cache_directories:
+    - "bower_components"    # relative to the build directory
+
+test:
+  pre:
+    - ./node_modules/ember-cli/bin/ember server --port 4203:
+        background: true
+    - sleep 5
+  override:
+    - ./node_modules/ember-cli/bin/ember test
