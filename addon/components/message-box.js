@@ -22,10 +22,11 @@ export default Ember.Component.extend({
 
   actions: {
     btn1Click() {
+      var callbackOutput = true;
       if (this.btn1Callback) {
-        this.btn1Callback();
+        callbackOutput = this.btn1Callback();
       }
-      this.close();
+      if(callbackOutput !== false) { this.close(); }
     },
 
     btn2Click() {
