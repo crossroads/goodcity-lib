@@ -18,6 +18,12 @@ export default Ember.TextField.extend({
     }
   }),
 
+  focusOut() {
+    if(parseInt(this.get("value")) === 0) {
+      this.set("value", null);
+    }
+  },
+
   isAllowed: Ember.computed('currentKey', function(){
     var key = this.get('currentKey');
     var allowed = (key === 13 ||
