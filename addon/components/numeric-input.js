@@ -4,6 +4,7 @@ export default Ember.TextField.extend({
   tagName: "input",
   type: "tel",
   attributeBindings: [ "name", "type", "value", "maxlength", "id", "autoFocus" , "placeholder", "required", "pattern"],
+  classNameBindings: ["class"],
 
   didInsertElement() {
     if(this.attrs.autoFocus) { this.$().focus(); }
