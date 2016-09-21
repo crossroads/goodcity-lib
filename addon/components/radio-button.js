@@ -15,7 +15,7 @@ export default Ember.Component.extend({
   }),
 
   onInit: Ember.on('init', function() {
-    if (this.get("value") == this.get("selection")) {
+    if (this.get("value") === this.get("selection")) {
       this.set("checked", true);
     }
   })
