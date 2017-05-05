@@ -3,10 +3,14 @@ machine:
     version: 4
 
 dependencies:
+  pre:
+    - if ! (which yarn); then curl -o- -L https://yarnpkg.com/install.sh | bash; fi
   post:
     - "./node_modules/ember-cli/node_modules/bower/bin/bower install"
+    - yarn link
   cache_directories:
     - "bower_components"    # relative to the build directory
+    - ~/.yarn
 
 test:
   pre:
