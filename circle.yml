@@ -6,7 +6,7 @@ dependencies:
   pre:
     - if ! (which yarn); then curl -o- -L https://yarnpkg.com/install.sh | bash; fi
   post:
-    - yarn add bower
+    - npm install bower
     - bower install
     - yarn link
   cache_directories:
