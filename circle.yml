@@ -8,7 +8,6 @@ dependencies:
   post:
     - npm install bower
     - bower install
-    - yarn link
   cache_directories:
     - "bower_components"    # relative to the build directory
     - ~/.yarn
