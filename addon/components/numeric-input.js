@@ -20,7 +20,7 @@ export default Ember.TextField.extend({
   }),
 
   focusOut() {
-    if(parseInt(this.get("value")) === 0) {
+    if(parseInt(this.get("value"), 10) === 0) {
       this.set("value", null);
     }
   },
