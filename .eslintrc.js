@@ -16,6 +16,7 @@ module.exports = {
   },
   rules: {
     'ember/no-old-shims': 'error',
-    'no-global-jquery': 0
+    'ember/no-global-jquery': 0,
+    'ember/no-console': 0
   }
 };
