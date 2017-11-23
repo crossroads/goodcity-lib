@@ -1,13 +1,15 @@
-import Ember from 'ember';
+import { later } from '@ember/runloop';
+import $ from 'jquery';
+import Component from '@ember/component';
 
-export default Ember.Component.extend({
+export default Component.extend({
   btn1Click: false,
   btn2Click: false,
   toggleEnter: true,
 
   keyUp: function (e) {
     var pressEnter = this.toggleProperty('toggleEnter');
-    var messageBox = Ember.$('#messageBox')[0];
+    var messageBox = $('#messageBox')[0];
 
     if(e.which === 13 && messageBox && pressEnter) {
       if(this.get('btn1Click')) {
@@ -21,13 +23,13 @@ export default Ember.Component.extend({
   },
 
   clickBtn1() {
-    Ember.$('#messageBox #btn1').each(message => {
+    $('#messageBox #btn1').each(message => {
       console.log(message);
-      var messageText = Ember.$('#messageBox p#messageBoxText').text().trim().toLowerCase();
-      var btn1Text = Ember.$('#messageBox #btn1').text().toLowerCase();
+      var messageText = $('#messageBox p#messageBoxText').text().trim().toLowerCase();
+      var btn1Text = $('#messageBox #btn1').text().toLowerCase();
       if((btn1Text.includes('okay') || btn1Text.includes('ok')) && messageText.includes('invalid sms code')) {
-        Ember.run.later(() => {
-          Ember.$('#messageBox #btn1').click();
+        later(() => {
+          $('#messageBox #btn1').click();
         }, 250);
       }
     });
