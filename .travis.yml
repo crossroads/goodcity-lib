@@ -1,17 +1,28 @@
 ---
 language: node_js
 node_js:
-  - "0.12"
+  - "4"
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 cache:
   directories:
-    - node_modules
+    - $HOME/.npm
+    # - node_modules
 
 env:
+  global:
+    # See https://git.io/vdao3 for details.
+    - JOBS=1
+  # we recommend new addons test the current and previous LTS
+  # as well as latest stable release (bonus points to beta/canary)
   - EMBER_TRY_SCENARIO=default
-  - EMBER_TRY_SCENARIO=ember-1.13
+  - EMBER_TRY_SCENARIO=ember-lts-2.8
+  - EMBER_TRY_SCENARIO=ember-lts-2.12
   - EMBER_TRY_SCENARIO=ember-release
   - EMBER_TRY_SCENARIO=ember-beta
   - EMBER_TRY_SCENARIO=ember-canary
@@ -24,8 +35,8 @@ matrix:
 before_install:
   - export PATH=/usr/local/phantomjs-2.0.0/bin:$PATH
   - "npm config set spin false"
-  - "npm install -g npm@^2"
-
+  - "npm install -g npm@4"
+  - npm --version
 install:
   - npm install -g bower
   - npm install
