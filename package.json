@@ -40,7 +40,8 @@
     "ember-export-application-global": "^1.0.5",
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.1.0",
-    "loader.js": "^4.0.0"
+    "loader.js": "^4.0.0",
+    "ember-cli-code-coverage": "^0.4.1"
   },
   "keywords": [
     "ember-addon",

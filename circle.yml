@@ -6,6 +6,7 @@ dependencies:
   pre:
     - if ! (which yarn); then curl -o- -L https://yarnpkg.com/install.sh | bash; fi
   post:
+    - npm install codeclimate-test-reporter
     - npm install bower
     - bower install
   cache_directories:
@@ -18,4 +19,6 @@ test:
         background: true
     - sleep 5
   override:
-    - ./node_modules/ember-cli/bin/ember test
+    - COVERAGE=true ./node_modules/ember-cli/bin/ember test
+  post:
+    - codeclimate-test-reporter < 'coverage/lcov.info'
