@@ -8,6 +8,7 @@ dependencies:
   post:
     - npm install codeclimate-test-reporter
     - npm install bower
+    - npm install phantomjs-prebuilt
     - bower install
   cache_directories:
     - "bower_components"    # relative to the build directory
