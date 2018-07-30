@@ -25,7 +25,7 @@ export default Ember.Component.extend({
       console.log(message);
       var messageText = Ember.$('#messageBox p#messageBoxText').text().trim().toLowerCase();
       var btn1Text = Ember.$('#messageBox #btn1').text().toLowerCase();
-      if((btn1Text.includes('okay') || btn1Text.includes('ok')) && messageText.includes('invalid sms code')) {
+      if(((btn1Text.indexOf('okay') >= 0) || (btn1Text.indexOf('ok') >= 0)) && (messageText.indexOf('invalid sms code') >= 0)) {
         Ember.run.later(() => {
           Ember.$('#messageBox #btn1').click();
         }, 250);
