@@ -16,14 +16,14 @@
     "private": true
   },
   "engines": {
-    "node": ">= 4"
+    "node": ">= 6"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.2",
     "ember-ajax": "2.5.0",
-    "ember-cli": "2.13.0",
+    "ember-cli": "2.11.0",
     "ember-cli-app-version": "2.0.0",
     "ember-cli-dependency-checker": "^1.2.0",
     "ember-cli-htmlbars": "^1.1.0",
@@ -50,6 +50,8 @@
   ],
   "dependencies": {
     "bower": "^1.8.0",
+    "codeclimate-test-reporter": "^0.5.0",
+    "phantomjs-prebuilt": "^2.1.14",
     "ember-cli-babel": "^5.1.6"
   },
   "ember-addon": {
