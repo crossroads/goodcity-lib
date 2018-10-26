@@ -1,0 +1,104 @@
+version: 2
+
+aliases:
+
+  - defaults: &defaults
+      docker:
+        - image: circleci/node:boron
+      working_directory: ~/code
+  - &restore-repo-cache
+      key: goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
+  - &restore-yarn-cache
+      keys:
+        - goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
+  - &save-yarn-cache
+      key: goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
+      paths:
+        - node_modules
+        - ~/.cache/yarn
+  - &yarn
+    |
+      yarn install --non-interactive --cache-folder ~/.cache/yarn --frozen-lockfile
+  - &restore-bower-cache
+      key: goodcity-lib-bower-components-{{ checksum "bower.json" }}
+  - &save-bower-cache
+      key: goodcity-lib-bower-components-{{ checksum "bower.json" }}
+      paths:
+        - bower_components
+
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps:
+      - checkout
+      - save_cache:
+          key: goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/code
+
+  package_dependencies:
+    <<: *defaults
+    steps:
+      - restore-cache: *restore-repo-cache
+      - restore-cache: *restore-yarn-cache
+      - run: *yarn
+      - save-cache: *save-yarn-cache
+      - restore-cache: *restore-bower-cache
+      - run: yarn run bower install
+      - save-cache: *save-bower-cache
+      - run: yarn link
+
+  test_cases:
+    <<: *defaults
+    environment:
+      JOBS: 1
+    steps:
+      - restore-cache: *restore-repo-cache
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-bower-cache
+      - run:
+          name: Start Ember test server
+          command: yarn run ember server --port 4203
+          background: true
+      - run:
+          name: Wait for Ember test server to start
+          command: dockerize -wait tcp://localhost:4203 -timeout 1m
+      - run:
+          name: Run Ember tests
+          command: COVERAGE=true yarn run ember test
+      - persist_to_workspace:
+          root: .
+          paths:
+            - coverage*/lcov.info
+
+  upload-coverage:
+    <<: *defaults
+    steps:
+      - restore-cache: *restore-repo-cache
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-bower-cache
+      - attach_workspace:
+          at: ~/code
+      - run:
+          name: Upload coverage results to Code Climate
+          command: |
+            yarn run codeclimate-test-reporter < coverage*/lcov.info
+
+workflows:
+    version: 2
+    build_and_bundle:
+      jobs:
+        - checkout_code
+        - package_dependencies:
+            requires:
+              - checkout_code
+        - test_cases:
+            requires:
+              - package_dependencies
+        - upload-coverage:
+            requires:
+              - package_dependencies
+              - test_cases
+            filters:
+              branches:
+                only: circle-ci2-linking-issue
