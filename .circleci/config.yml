@@ -83,6 +83,25 @@ jobs:
           command: |
             yarn run codeclimate-test-reporter < coverage*/lcov.info
 
+  deployment:
+    <<: *defaults
+    steps:
+      - restore-cache: *restore-repo-cache
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-bower-cache
+      - run:
+          name: Setup Environment variables
+          command: |
+            echo 'export BRANCH_NAME=$(if [ "$CIRCLE_BRANCH" == "live" ]; then echo live; else echo master; fi)' >> $BASH_ENV
+      - run:
+          name: Rebuild Stock app build
+          command: |
+            curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" "https://circleci.com/api/v1.1/project/github/crossroads/stock.goodcity/build?circle-token=$circle_token"
+      - run:
+          name: Rebuild Browse app build
+          command: |
+            curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" "https://circleci.com/api/v1.1/project/github/crossroads/browse.goodcity/build?circle-token=$circle_token"
+
 workflows:
     version: 2
     build_and_bundle:
@@ -101,3 +120,11 @@ workflows:
             filters:
               branches:
                 only: /^(master|live)$/
+        - deployment:
+            requires:
+              - tests
+              - package_dependencies
+            filters:
+              branches:
+                only: /^(master|live)$/
+
