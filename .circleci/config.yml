@@ -49,8 +49,8 @@ jobs:
 
   test_cases:
     <<: *defaults
-    environment:
-      JOBS: 1
+    docker:
+      - image: circleci/node:8-browsers
     steps:
       - restore-cache: *restore-repo-cache
       - restore-cache: *restore-yarn-cache
