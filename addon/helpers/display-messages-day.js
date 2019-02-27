@@ -1,5 +1,4 @@
 import Ember from "ember";
-import moment from "moment";
 
 export default Ember.Helper.helper(function (value) {
   var todayText = value[1];
@@ -15,8 +14,8 @@ export default Ember.Helper.helper(function (value) {
   } else if (day_difference < 1) {
     return todayText;
   } else if (day_difference < 7) {
-    return moment(message_date).format('dddd');
+    return moment(message_date).format('dddd'); // jshint ignore:line
   } else {
-    return moment(message_date).format('DD MMM, YYYY');
+    return moment(message_date).format('DD MMM, YYYY'); // jshint ignore:line
   }
 });
