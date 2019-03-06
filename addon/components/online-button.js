@@ -2,7 +2,6 @@ import Ember from "ember";
 
 export default Ember.Component.extend(Ember.TargetActionSupport, {
   disabled: false,
-
   updateDisabled: null,
 
   didInsertElement: function () {
@@ -26,6 +25,12 @@ export default Ember.Component.extend(Ember.TargetActionSupport, {
     if (this.get('disabled')) {
       return false;
     }
-    this.get('onClick')();
+
+    if (Ember.$('.message_textbar')[0].value === ''){
+      Ember.$('.message_textbar').parent().addClass('has-error');
+      return false;
+    }else{
+      this.get('onClick')();
+    }
   }
 });
