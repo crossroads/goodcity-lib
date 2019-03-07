@@ -26,8 +26,8 @@ export default Ember.Component.extend(Ember.TargetActionSupport, {
       return false;
     }
 
-    if (Ember.$('.message_textbar')[0].value === ''){
-      Ember.$('.message_textbar').parent().addClass('has-error');
+    if (Ember.$('.message-bar')[0].value === ''){
+      Ember.$('.message-bar').parent().addClass('has-error');
       return false;
     }else{
       this.get('onClick')();
