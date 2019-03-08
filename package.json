@@ -11,6 +11,17 @@
     "start": "ember server",
     "test": "ember try:each"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "repository": {
     "url": "https://github.com/crossroads/goodcity-lib.git",
     "private": true
@@ -42,7 +53,10 @@
     "ember-load-initializers": "^0.5.1",
     "ember-resolver": "^2.1.0",
     "loader.js": "^4.6.0",
-    "ember-cli-code-coverage": "^0.4.2"
+    "ember-cli-code-coverage": "^0.4.2",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "1.15.3"
   },
   "keywords": [
     "ember-addon",
