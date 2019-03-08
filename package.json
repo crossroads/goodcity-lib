@@ -67,6 +67,7 @@
     "codeclimate-test-reporter": "^0.5.0",
     "ember-cli-babel": "^5.1.6",
     "extend": "3.0.2",
+    "merge": "1.2.1",
     "phantomjs-prebuilt": "^2.1.14"
   },
   "ember-addon": {
