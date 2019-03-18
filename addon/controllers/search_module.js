@@ -13,7 +13,12 @@ export default Ember.Controller.extend(InfinityRoute, {
   }).volatile(),
 
   sanitizeString(str){
-    str = str.replace(/[^a-z0-9áéíóúñü \.,_-]/gim,"");
+    // these are the special characters '.,)(@_-' that are allowed for search
+    // '\.' => will allow '.'
+    // '\(' => will allow '('
+    // '\@' => will allow '@'
+    // '\)' => will allow ')'
+    str = str.replace(/[^a-z0-9áéíóúñü \.,\)\(@_-]/gim, "");
     return str.trim();
   },
 
