@@ -9,7 +9,9 @@
   "scripts": {
     "build": "ember build",
     "start": "ember server",
-    "test": "ember try:each"
+    "test": "ember try:each",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "husky": {
     "hooks": {
@@ -67,16 +69,18 @@
     "codeclimate-test-reporter": "^0.5.0",
     "cryptiles": "^4.1.2",
     "debug": "2.6.9",
-    "ember-cli-babel": "^5.1.6",
+    "ember-cli-babel": "^6.0.0",
     "extend": "^3.0.2",
     "hoek": "^4.2.1",
     "lodash": "^4.17.11",
     "merge": "^1.2.1",
     "minimatch": "^3.0.2",
     "morgan": "^1.9.1",
-    "phantomjs-prebuilt": "^2.1.14"
+    "phantomjs-prebuilt": "^2.1.14",
+    "snyk": "^1.165.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
-  }
+  },
+  "snyk": true
 }
