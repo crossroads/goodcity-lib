@@ -1,20 +1,25 @@
-import Ember from 'ember';
+import Ember from "ember";
 
 export default Ember.Component.extend({
-  layoutName: 'loading',
+  layoutName: "loading",
   classNames: ["loading-indicator"],
   messageBox: Ember.inject.service(),
   logger: Ember.inject.service(),
-  i18n: Ember.inject.service(),
+  intl: Ember.inject.service(),
   timer: null,
 
   didInsertElement() {
     var timer = Ember.run.later(() => {
-      this.get("logger").error(new Error(this.get("i18n").t("loading_timeout_error")));
-      this.get("messageBox").alert(this.get("i18n").t("loading_timeout"), () => {
-        this.destroy();
-        window.location.reload();
-      });
+      this.get("logger").error(
+        new Error(this.get("intl").t("loading_timeout_error"))
+      );
+      this.get("messageBox").alert(
+        this.get("intl").t("loading_timeout"),
+        () => {
+          this.destroy();
+          window.location.reload();
+        }
+      );
     }, 3000000);
 
     this.set("timer", timer);

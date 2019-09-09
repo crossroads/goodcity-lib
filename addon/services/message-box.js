@@ -1,22 +1,37 @@
-import Ember from 'ember';
+import Ember from "ember";
 const { getOwner } = Ember;
 
 export default Ember.Service.extend({
-  i18n: Ember.inject.service(),
+  intl: Ember.inject.service(),
 
   alert: function(message, callback) {
-    this.custom(message, this.get("i18n").t("okay"), callback);
+    this.custom(message, this.get("intl").t("okay"), callback);
   },
 
   confirm: function(message, callback) {
-    this.custom(message, this.get("i18n").t("cancel"), null, this.get("i18n").t("okay"), callback);
+    this.custom(
+      message,
+      this.get("intl").t("cancel"),
+      null,
+      this.get("intl").t("okay"),
+      callback
+    );
   },
 
-  custom: function(message, btn1Text, btn1Callback, btn2Text, btn2Callback, displayCloseLink) {
+  custom: function(
+    message,
+    btn1Text,
+    btn1Callback,
+    btn2Text,
+    btn2Callback,
+    displayCloseLink
+  ) {
     Ember.$(document).trigger("cancel-loading-timer");
     Ember.$(".loading-indicator").remove();
 
-    var view = getOwner(this).lookup("component:message-box").append();
+    var view = getOwner(this)
+      .lookup("component:message-box")
+      .append();
     view.set("btn1Text", btn1Text);
     view.set("btn1Callback", btn1Callback);
     view.set("btn2Text", btn2Text);

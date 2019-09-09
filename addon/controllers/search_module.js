@@ -2,17 +2,16 @@ import Ember from "ember";
 import InfinityRoute from "ember-infinity/mixins/route";
 
 export default Ember.Controller.extend(InfinityRoute, {
-
   queryParams: ["showQuantityItems"],
   showQuantityItems: false,
 
-  getCurrentUser: Ember.computed(function(){
-    var store = this.get('store');
-    var currentUser = store.peekAll('user_profile').get('firstObject') || null;
+  getCurrentUser: Ember.computed(function() {
+    var store = this.get("store");
+    var currentUser = store.peekAll("user_profile").get("firstObject") || null;
     return currentUser;
   }).volatile(),
 
-  sanitizeString(str){
+  sanitizeString(str) {
     // these are the special characters '.,)(@_-' that are allowed for search
     // '\.' => will allow '.'
     // '\(' => will allow '('
@@ -22,9 +21,9 @@ export default Ember.Controller.extend(InfinityRoute, {
     return str.trim();
   },
 
-  searchText: Ember.computed('searchInput',{
+  searchText: Ember.computed("searchInput", {
     get() {
-      return this.get('searchInput') || "";
+      return this.get("searchInput") || "";
     },
 
     set(key, value) {
@@ -32,7 +31,7 @@ export default Ember.Controller.extend(InfinityRoute, {
     }
   }),
 
-  i18n: Ember.inject.service(),
+  intl: Ember.inject.service(),
   store: Ember.inject.service(),
   isLoading: false,
   hasNoResults: false,
@@ -61,18 +60,34 @@ export default Ember.Controller.extend(InfinityRoute, {
     if (searchText.length > 0) {
       this.set("isLoading", true);
       this.set("hasNoResults", false);
-      if(this.get("unloadAll")) { this.get("store").unloadAll(); }
+      if (this.get("unloadAll")) {
+        this.get("store").unloadAll();
+      }
 
-      this.infinityModel(this.get("searchModelName"),
-        { perPage: 25, startingPage: 1, modelPath: 'filteredResults',stockRequest: true },
-        { searchText: "searchText", itemId: "itemSetId", toDesignateItem: "toDesignateItem", showQuantityItems: "showQuantityItems" })
+      this.infinityModel(
+        this.get("searchModelName"),
+        {
+          perPage: 25,
+          startingPage: 1,
+          modelPath: "filteredResults",
+          stockRequest: true
+        },
+        {
+          searchText: "searchText",
+          itemId: "itemSetId",
+          toDesignateItem: "toDesignateItem",
+          showQuantityItems: "showQuantityItems"
+        }
+      )
         .then(data => {
           data.forEach(record => {
-            if(record.constructor.toString() === "stock@model:designation:") {
-              this.store.query("orders_package", { search_by_order_id: record.get("id") });
+            if (record.constructor.toString() === "stock@model:designation:") {
+              this.store.query("orders_package", {
+                search_by_order_id: record.get("id")
+              });
             }
           });
-          if(this.get("searchText") === data.meta.search) {
+          if (this.get("searchText") === data.meta.search) {
             this.set("filteredResults", data);
             this.set("hasNoResults", data.get("length") === 0);
           }
