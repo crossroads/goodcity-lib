@@ -1,16 +1,17 @@
 <label class="{{if selectArrow 'select'}}" for="{{idNames}}">
-    <select {{action 'change' on='change'}} required="{{required}}" pattern="{{pattern}}" disabled="{{disabled}}" id="{{idNames}}">
-      {{#if prompt}}
-        <option value="" selected={{is-not selectedValue}}>{{prompt}}</option>
-      {{/if}}
+  <select {{action 'change' on='change'}} required="{{required}}" pattern="{{pattern}}" disabled="{{disabled}}"
+    id="{{idNames}}">
+    {{#if prompt}}
+      <option value="" selected={{is-not selectedValue}}>{{prompt}}</option>
+    {{/if}}
 
-      {{#each content key="@index" as |item|}}
-        <option value={{item.id}} selected={{is-equal item.id selectedValue.id}}>
-          {{item.name}}
-        </option>
-      {{/each}}
-    </select>
+    {{#each content key="@index" as |item|}}
+      <option value={{item.id}} selected={{is-equal item.id selectedValue.id}}>
+        {{item.name}}
+      </option>
+    {{/each}}
+  </select>
 </label>
 {{#if showDropdownIcon}}
-  <i class="fa fa-caret-down dropdown-icon"></i>
+  <i class="fa dropdown-icon">{{fa-icon 'sort-down'}}</i>
 {{/if}}
