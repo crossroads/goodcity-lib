@@ -4,7 +4,6 @@
     {{#if prompt}}
       <option value="" selected={{is-not selectedValue}}>{{prompt}}</option>
     {{/if}}
-
     {{#each content key="@index" as |item|}}
       <option value={{item.id}} selected={{is-equal item.id selectedValue.id}}>
         {{item.name}}
@@ -12,6 +11,3 @@
     {{/each}}
   </select>
 </label>
-{{#if showDropdownIcon}}
-  <i class="fa dropdown-icon">{{fa-icon 'sort-down'}}</i>
-{{/if}}
