@@ -11,13 +11,13 @@
     </option>
     {{/each}}
   </select>
+  {{#if errorMessage}}
+  <div class="select-error-message">
+    {{fa-icon "exclamation-triangle"}}
+    <span>{{errorMessage}}</span>
+  </div>
+  {{/if}}
 </label>
-{{#if errorMessage}}
-<div class="select-error-message">
-  {{fa-icon "exclamation-triangle"}}
-  <span>{{errorMessage}}</span>
-</div>
-{{/if}}
 {{#if showDropdownIcon}}
 <i class="fa dropdown-icon">{{fa-icon 'sort-down'}}</i>
 {{/if}}
