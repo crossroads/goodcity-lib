@@ -2,16 +2,22 @@
   <select {{action 'change' on='change'}} required="{{required}}" pattern="{{pattern}}" disabled="{{disabled}}"
     id="{{idNames}}">
     {{#if prompt}}
-      <option value="" selected={{is-not selectedValue}}>{{prompt}}</option>
+    <option value="" selected={{is-not selectedValue}}>{{prompt}}</option>
     {{/if}}
 
     {{#each content key="@index" as |item|}}
-      <option value={{item.id}} selected={{is-equal item.id selectedValue.id}}>
-        {{item.name}}
-      </option>
+    <option value={{item.id}} selected={{is-equal item.id selectedValue.id}}>
+      {{item.name}}
+    </option>
     {{/each}}
   </select>
 </label>
 {{#if showDropdownIcon}}
-  <i class="fa dropdown-icon">{{fa-icon 'sort-down'}}</i>
+<i class="fa dropdown-icon">{{fa-icon 'sort-down'}}</i>
+{{/if}}
+{{#if errorMessage}}
+<div class="select-error-message">
+  {{fa-icon "exclamation-triangle"}}
+  <span>{{errorMessage}}</span>
+</div>
 {{/if}}
