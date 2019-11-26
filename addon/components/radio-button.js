@@ -1,6 +1,8 @@
-import Ember from "ember";
+import { on } from "@ember/object/evented";
+import { computed } from "@ember/object";
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: "input",
   type: "radio",
   attributeBindings: [
@@ -17,11 +19,11 @@ export default Ember.Component.extend({
     this.set("selection", this.get("value"));
   },
 
-  checked: Ember.computed("selection", function() {
+  checked: computed("selection", function() {
     return this.get("value") === this.get("selection");
   }),
 
-  onInit: Ember.on("init", function() {
+  onInit: on("init", function() {
     if (this.get("value") === this.get("selection")) {
       this.set("checked", true);
     }

@@ -1,8 +1,7 @@
-import Ember from 'ember';
+import Component from "@ember/component";
 
-export default Ember.Component.extend({
-
-  layoutName: 'components/message-box',
+export default Component.extend({
+  layoutName: "components/message-box",
   message: "",
   btn1Text: "",
   btn1Callback: () => {},
@@ -26,7 +25,9 @@ export default Ember.Component.extend({
       if (this.btn1Callback) {
         callbackOutput = this.btn1Callback();
       }
-      if(callbackOutput !== false) { this.close(); }
+      if (callbackOutput !== false) {
+        this.close();
+      }
     },
 
     btn2Click() {

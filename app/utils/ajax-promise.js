@@ -1,4 +1,6 @@
-import Ember from "ember";
+import { run } from "@ember/runloop";
+import $ from "jquery";
+import { Promise } from "rsvp";
 import config from "../config/environment";
 
 let defaultHeaders = {
@@ -15,8 +17,8 @@ function _read(data) {
 }
 
 function AjaxPromise(url, type, authToken, data, args, language = "en") {
-  return new Ember.RSVP.Promise(function(resolve, reject) {
-    var headers = Ember.$.extend({}, _read(defaultHeaders), {
+  return new Promise(function(resolve, reject) {
+    var headers = $.extend({}, _read(defaultHeaders), {
       "Accept-Language": language
     });
 
@@ -24,8 +26,8 @@ function AjaxPromise(url, type, authToken, data, args, language = "en") {
       headers["Authorization"] = "Bearer " + authToken;
     }
 
-    Ember.$.ajax(
-      Ember.$.extend(
+    $.ajax(
+      $.extend(
         {},
         {
           type: type,
@@ -35,13 +37,13 @@ function AjaxPromise(url, type, authToken, data, args, language = "en") {
           url: url.indexOf("http") === -1 ? config.APP.SERVER_PATH + url : url,
           headers: headers,
           success: function(data) {
-            Ember.run(function() {
+            run(function() {
               resolve(data);
             });
           },
           error: function(jqXHR) {
             jqXHR.url = url;
-            Ember.run(function() {
+            run(function() {
               reject(jqXHR);
             });
           }

@@ -1,12 +1,17 @@
+import $ from "jquery";
+import { bind } from "@ember/runloop";
+import Component from "@ember/component";
 import Ember from "ember";
 
-export default Ember.Component.extend(Ember.TargetActionSupport, {
+export default Component.extend(Ember.TargetActionSupport, {
   disabled: false,
   updateDisabled: null,
 
-  didInsertElement: function () {
-    this.updateDisabled = Ember.run.bind(this, () => {
-      var online = navigator.connection ? navigator.connection.type !== "none" : navigator.onLine;
+  didInsertElement: function() {
+    this.updateDisabled = bind(this, () => {
+      var online = navigator.connection
+        ? navigator.connection.type !== "none"
+        : navigator.onLine;
       this.set("disabled", !online);
     });
     this.updateDisabled();
@@ -14,7 +19,7 @@ export default Ember.Component.extend(Ember.TargetActionSupport, {
     window.addEventListener("offline", this.updateDisabled);
   },
 
-  willDestroyElement: function () {
+  willDestroyElement: function() {
     if (this.updateDisabled) {
       window.removeEventListener("online", this.updateDisabled);
       window.removeEventListener("offline", this.updateDisabled);
@@ -22,15 +27,17 @@ export default Ember.Component.extend(Ember.TargetActionSupport, {
   },
 
   click() {
-    if (this.get('disabled')) {
+    if (this.get("disabled")) {
       return false;
     }
 
-    if (Ember.$('.message-bar')[0].value === ''){
-      Ember.$('.message-bar').parent().addClass('has-error');
+    if ($(".message-bar")[0].value === "") {
+      $(".message-bar")
+        .parent()
+        .addClass("has-error");
       return false;
-    }else{
-      this.get('onClick')();
+    } else {
+      this.get("onClick")();
     }
   }
 });
