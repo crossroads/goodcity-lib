@@ -32,7 +32,10 @@ export default Ember.TextField.extend({
   }),
 
   focusOut() {
-    if (parseInt(this.get("value"), 10) === 0 && this.get("name") != "labels") {
+    if (
+      parseInt(this.get("value"), 10) === 0 &&
+      this.get("name") !== "labels"
+    ) {
       this.set("value", null);
     }
   },
