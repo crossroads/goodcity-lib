@@ -12,7 +12,8 @@ export default Ember.TextField.extend({
     "autoFocus",
     "placeholder",
     "required",
-    "pattern"
+    "pattern",
+    "acceptZeroValue"
   ],
   classNameBindings: ["class"],
 
