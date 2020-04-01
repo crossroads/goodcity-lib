@@ -83,8 +83,10 @@ export default Ember.TextField.extend({
 
   keyPress: function() {
     var inputValue = (this.value || "").toString();
+    /* jshint ignore:start */
     return this.get("isAllowed")
       ? true
       : inputValue.length < this.attrs.maxlength;
+    /* jshint ignore:end */
   }
 });
