@@ -13,7 +13,8 @@ export default Ember.TextField.extend({
     "placeholder",
     "required",
     "pattern",
-    "acceptZeroValue"
+    "acceptZeroValue",
+    "acceptFloat"
   ],
   classNameBindings: ["class"],
 
@@ -33,9 +34,17 @@ export default Ember.TextField.extend({
   }),
 
   focusOut() {
-    const value = this.get("value");
-    if ((+value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
+    let value = this.get("value");
+    if (this.get("acceptFloat")) {
+      value = parseFloat(value);
+    } else {
+      value = +value;
+    }
+
+    if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
+    } else {
+      this.set("value", value);
     }
   },
 
@@ -47,7 +56,8 @@ export default Ember.TextField.extend({
       key === 9 ||
       key === 46 ||
       key === 39 ||
-      (key >= 35 && key <= 37);
+      (key >= 35 && key <= 37) ||
+      (this.get("acceptFloat") && key === 190);
     return allowed;
   }),
 
@@ -66,6 +76,7 @@ export default Ember.TextField.extend({
       (e.ctrlKey && key === 86) ||
       keyList.indexOf(key) >= 0 ||
       (key >= 35 && key <= 37) ||
+      (this.get("acceptFloat") && key === 190) ||
       (key >= 48 && key <= 57) ||
       (key >= 96 && key <= 105)
     );
