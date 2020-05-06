@@ -65,7 +65,7 @@ export default Ember.TextField.extend({
     var value = this.attrs.value.value;
     var regexPattern = new RegExp("^".concat(this.attrs.pattern, "$"));
     if (value && value.toString().search(regexPattern) !== 0) {
-      this.set("value", value.replace(/\D/g, ""));
+      this.set("value", value.replace(/[^\d\.]/g, ""));
     }
     return true;
   },
