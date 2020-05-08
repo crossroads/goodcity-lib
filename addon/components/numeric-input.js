@@ -35,11 +35,6 @@ export default Ember.TextField.extend({
 
   focusOut() {
     let value = this.get("value");
-    if (this.get("acceptFloat")) {
-      value = parseFloat(value);
-    } else {
-      value = +value;
-    }
 
     if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
@@ -63,9 +58,10 @@ export default Ember.TextField.extend({
 
   keyUp: function() {
     var value = this.attrs.value.value;
+    const replacePattern = this.get("acceptFloat") ? /[^\d\.]/g : /[\D]/g;
     var regexPattern = new RegExp("^".concat(this.attrs.pattern, "$"));
     if (value && value.toString().search(regexPattern) !== 0) {
-      this.set("value", value.replace(/[^\d\.]/g, ""));
+      this.set("value", value.replace(replacePattern, ""));
     }
     return true;
   },
