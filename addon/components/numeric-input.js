@@ -39,7 +39,7 @@ export default Ember.TextField.extend({
     if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
     } else {
-      this.set("value", value);
+      this.set("value", Number(value));
     }
   },
 
