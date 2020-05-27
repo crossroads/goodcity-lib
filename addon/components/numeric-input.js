@@ -35,6 +35,9 @@ export default Ember.TextField.extend({
 
   focusOut() {
     let value = this.get("value");
+    if (!value) {
+      return;
+    }
 
     if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
