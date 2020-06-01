@@ -1,7 +1,5 @@
 import Ember from "ember";
 
-const DEFAULT_MAX_LENGTH = 6;
-
 export default Ember.TextField.extend({
   tagName: "input",
   type: "tel",
@@ -18,6 +16,7 @@ export default Ember.TextField.extend({
     "acceptZeroValue",
     "acceptFloat"
   ],
+  defaultMaxLength: 6,
   classNameBindings: ["class"],
 
   didInsertElement() {
@@ -48,7 +47,9 @@ export default Ember.TextField.extend({
       this.set(
         "value",
         this.get("acceptFloat")
-          ? +(+value).toFixed((this.get("maxlength") || DEFAULT_MAX_LENGTH) - 2)
+          ? +(+value).toFixed(
+              (this.get("maxlength") || this.get("defaultMaxLength")) - 2
+            )
           : value
       );
     }
