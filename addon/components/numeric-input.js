@@ -42,7 +42,12 @@ export default Ember.TextField.extend({
     if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
     } else {
-      this.set("value", this.get("acceptFloat") ? Number(value) : value);
+      this.set(
+        "value",
+        this.get("acceptFloat")
+          ? +(+value).toFixed((this.get("maxlength") || 6) - 2)
+          : value
+      );
     }
   },
 
