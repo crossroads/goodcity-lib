@@ -16,6 +16,7 @@ export default Ember.TextField.extend({
     "acceptZeroValue",
     "acceptFloat"
   ],
+  defaultMaxLength: 6,
   classNameBindings: ["class"],
 
   didInsertElement() {
@@ -34,6 +35,7 @@ export default Ember.TextField.extend({
   }),
 
   focusOut() {
+    /* jshint ignore:start */
     let value = this.get("value");
     if (!value) {
       return;
@@ -42,8 +44,16 @@ export default Ember.TextField.extend({
     if ((value === 0 && !this.get("acceptZeroValue")) || isNaN(value)) {
       this.set("value", null);
     } else {
-      this.set("value", this.get("acceptFloat") ? Number(value) : value);
+      this.set(
+        "value",
+        this.get("acceptFloat")
+          ? +(+value).toFixed(
+              (this.get("maxlength") || this.get("defaultMaxLength")) - 2
+            )
+          : value
+      );
     }
+    /* jshint ignore:end */
   },
 
   isAllowed: Ember.computed("currentKey", function() {
