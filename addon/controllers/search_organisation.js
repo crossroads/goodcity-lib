@@ -4,8 +4,8 @@ import searchModule from "./search_module";
 export default searchModule.extend({
   minSearchTextLength: 3,
 
-  onSearchTextChange: Ember.observer("searchText", function(){
-    if(this.get('searchText').length){
+  onSearchTextChange: Ember.observer("searchText", function() {
+    if (this.get("searchText").length) {
       Ember.run.debounce(this, this.applyFilter, 500);
     } else {
       this.set("filteredResults", []);
@@ -17,17 +17,23 @@ export default searchModule.extend({
     if (searchText.length > this.get("minSearchTextLength")) {
       this.set("isLoading", true);
       this.set("hasNoResults", false);
-      if(this.get("unloadAll")) { this.get("store").unloadAll(); }
+      if (this.get("unloadAll")) {
+        this.get("store").unloadAll();
+      }
 
-      this.infinityModel("gcOrganisation",
-        { startingPage: 1, perPage: 25, modelPath: 'filteredResults'},
-        { searchText: "searchText"}).then(data => {
-          if(this.get("searchText") === data.meta.search) {
+      this.infinityModel(
+        "organisation",
+        { startingPage: 1, perPage: 25, modelPath: "filteredResults" },
+        { searchText: "searchText" }
+      )
+        .then(data => {
+          if (this.get("searchText") === data.meta.search) {
             this.set("filteredResults", data);
             this.store.pushPayload(data);
             this.set("hasNoResults", data.get("length") === 0);
           }
-        }).finally(() => this.set("isLoading", false));
+        })
+        .finally(() => this.set("isLoading", false));
     }
     this.set("filteredResults", []);
   },
@@ -40,7 +46,9 @@ export default searchModule.extend({
     },
 
     selectOrganisation(organisation) {
-      this.transitionToRoute('account_details',{ queryParams: { orgId: organisation.id }});
+      this.transitionToRoute("account_details", {
+        queryParams: { orgId: organisation.id }
+      });
     }
   }
 });
