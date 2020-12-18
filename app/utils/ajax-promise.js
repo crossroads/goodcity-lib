@@ -14,7 +14,15 @@ function _read(data) {
   return data;
 }
 
+function getServerPath(namespace) {
+  const host = config.APP.API_HOST_URL + "/";
+  return namespace
+    ? `${host}${config.APP.NAMESPACE_V2}`
+    : `${host}${config.APP.NAMESPACE}`;
+}
 function AjaxPromise(url, type, authToken, data, args, language = "en") {
+  const { version } = args;
+
   return new Ember.RSVP.Promise(function(resolve, reject) {
     var headers = Ember.$.extend({}, _read(defaultHeaders), {
       "Accept-Language": language
@@ -32,7 +40,7 @@ function AjaxPromise(url, type, authToken, data, args, language = "en") {
           dataType: "json",
           data: data,
           language: language,
-          url: url.indexOf("http") === -1 ? config.APP.SERVER_PATH + url : url,
+          url: url.indexOf("http") === -1 ? getServerPath(version) + url : url,
           headers: headers,
           success: function(data) {
             Ember.run(function() {
