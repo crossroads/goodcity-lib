@@ -21,7 +21,7 @@ function getServerPath(namespace) {
     : `${host}${config.APP.NAMESPACE}`;
 }
 function AjaxPromise(url, type, authToken, data, args, language = "en") {
-  const { version } = args;
+  const { version } = args ? args : "";
 
   return new Ember.RSVP.Promise(function(resolve, reject) {
     var headers = Ember.$.extend({}, _read(defaultHeaders), {
