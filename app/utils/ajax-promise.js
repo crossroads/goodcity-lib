@@ -16,7 +16,7 @@ function _read(data) {
 
 function getServerPath(namespace) {
   const host = config.APP.API_HOST_URL + "/";
-  return namespace
+  return Number(namespace) == 2
     ? `${host}${config.APP.NAMESPACE_V2}`
     : `${host}${config.APP.NAMESPACE}`;
 }
