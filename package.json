@@ -73,8 +73,7 @@
     "lodash": "^4.17.12",
     "merge": "^1.2.1",
     "minimatch": "^3.0.2",
-    "morgan": "^1.9.1",
-    "phantomjs-prebuilt": "^2.1.14"
+    "morgan": "^1.9.1"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
