@@ -1,18 +1,21 @@
-version: 2
+version: 2.1
 
 aliases:
 
   - defaults: &defaults
       docker:
-        - image: circleci/node:boron
+        - image: cimg/node:10.24.1-browsers
       working_directory: ~/code
+      environment:
+        # JOBS: 1 required to disable workers pools on broccoli as the underlying container reports many cores and runs out of memory if trying to spawn that many threads!
+        JOBS: 1
   - &restore-repo-cache
-      key: goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
+      key: v1-goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
   - &restore-yarn-cache
       keys:
-        - goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
+        - v1-goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
   - &save-yarn-cache
-      key: goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
+      key: v1-goodcity-lib-yarn-packages-{{ checksum "yarn.lock" }}
       paths:
         - node_modules
         - ~/.cache/yarn
@@ -20,11 +23,18 @@ aliases:
     |
       yarn install --non-interactive --cache-folder ~/.cache/yarn --frozen-lockfile
   - &restore-bower-cache
-      key: goodcity-lib-bower-components-{{ checksum "bower.json" }}
+      key: v1-goodcity-lib-bower-components-{{ checksum "bower.json" }}
   - &save-bower-cache
-      key: goodcity-lib-bower-components-{{ checksum "bower.json" }}
+      key: v1-goodcity-lib-bower-components-{{ checksum "bower.json" }}
       paths:
         - bower_components
+
+# -----------------------------
+# Orbs
+# -----------------------------
+
+orbs:
+  browser-tools: circleci/browser-tools@1.5.2
 
 jobs:
   checkout_code:
@@ -32,29 +42,30 @@ jobs:
     steps:
       - checkout
       - save_cache:
-          key: goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: v1-goodcity-lib-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/code
 
   package_dependencies:
     <<: *defaults
     steps:
-      - restore-cache: *restore-repo-cache
-      - restore-cache: *restore-yarn-cache
+      - restore_cache: *restore-repo-cache
+      - restore_cache: *restore-yarn-cache
       - run: *yarn
-      - save-cache: *save-yarn-cache
-      - restore-cache: *restore-bower-cache
+      - save_cache: *save-yarn-cache
+      - restore_cache: *restore-bower-cache
       - run: yarn run bower install
-      - save-cache: *save-bower-cache
+      - save_cache: *save-bower-cache
 
   test_cases:
     <<: *defaults
-    docker:
-      - image: circleci/node:8-browsers
     steps:
-      - restore-cache: *restore-repo-cache
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-bower-cache
+      - run: sudo apt update && sudo apt -y upgrade libu2f-udev
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
+      - restore_cache: *restore-repo-cache
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-bower-cache
       - run:
           name: Start Ember test server
           command: yarn run ember server --port 4203
@@ -73,9 +84,9 @@ jobs:
   upload-coverage:
     <<: *defaults
     steps:
-      - restore-cache: *restore-repo-cache
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-bower-cache
+      - restore_cache: *restore-repo-cache
+      - restore_cache: *restore-yarn-cache
+      - restore_cache: *restore-bower-cache
       - attach_workspace:
           at: ~/code
       - run:
@@ -83,27 +94,7 @@ jobs:
           command: |
             yarn run codeclimate-test-reporter < coverage*/lcov.info
 
-  deployment:
-    <<: *defaults
-    steps:
-      - restore-cache: *restore-repo-cache
-      - restore-cache: *restore-yarn-cache
-      - restore-cache: *restore-bower-cache
-      - run:
-          name: Setup Environment variables
-          command: |
-            echo 'export BRANCH_NAME=$(if [ "$CIRCLE_BRANCH" == "live" ]; then echo live; else echo master; fi)' >> $BASH_ENV
-      - run:
-          name: Rebuild Stock app build
-          command: |
-            curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" "https://circleci.com/api/v1.1/project/github/crossroads/stock.goodcity/build?circle-token=$circle_token"
-      - run:
-          name: Rebuild Browse app build
-          command: |
-            curl -X POST -H "Accept: application/json" -H "Content-Type: application/json" "https://circleci.com/api/v1.1/project/github/crossroads/browse.goodcity/build?circle-token=$circle_token"
-
 workflows:
-    version: 2
     build_and_bundle:
       jobs:
         - checkout_code
@@ -120,11 +111,3 @@ workflows:
             filters:
               branches:
                 only: /^(master|live)$/
-        - deployment:
-            requires:
-              - test_cases
-              - package_dependencies
-            filters:
-              branches:
-                only: /^(master|live)$/
-
